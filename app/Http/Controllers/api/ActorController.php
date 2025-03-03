@@ -5,83 +5,163 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Actor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ActorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Obtiene la lista de todos los actores registrados.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         $actors = Actor::all();
-        if(!$actors){
+
+        if ($actors->isEmpty()) {
             return response()->json([
                 'result' => false,
-                'msg' => "No se encontraron actores."
+                'msg' => "No hay actores registrados."
             ], 404);
         }
+
         return response()->json([
             'result' => true,
-            'msg' => "Se encontraro los actores.",
+            'msg' => "Lista de actores obtenida exitosamente.",
             'data' => $actors
         ], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Registra un nuevo actor en la base de datos.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+        ], [
+            'first_name.required' => 'El nombre es obligatorio.',
+            'first_name.string' => 'El nombre debe ser una cadena de texto.',
+            'first_name.max' => 'El nombre no puede tener más de 255 caracteres.',
+
+            'last_name.required' => 'El apellido es obligatorio.',
+            'last_name.string' => 'El apellido debe ser una cadena de texto.',
+            'last_name.max' => 'El apellido no puede tener más de 255 caracteres.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'result' => false,
+                'msg' => "Error en la validación de datos.",
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $actor = Actor::create($request->only(['first_name', 'last_name']));
+
+        return response()->json([
+            'result' => true,
+            'msg' => "Se ha registrado a " . $actor->first_name . ".",
+        ], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Muestra la información de un actor específico.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        $actor = Actor::find($id);
+
+        if (!$actor) {
+            return response()->json([
+                'result' => false,
+                'msg' => "No se encontró el actor especificado.",
+            ], 404);
+        }
+
+        return response()->json([
+            'result' => true,
+            'msg' => "Información de " . $actor->first_name . ".",
+            'data' => $actor
+        ], 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Actualiza la información de un actor existente.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+        ], [
+            'first_name.required' => 'El nombre es obligatorio.',
+            'first_name.string' => 'El nombre debe ser una cadena de texto.',
+            'first_name.max' => 'El nombre no puede tener más de 255 caracteres.',
+
+            'last_name.required' => 'El apellido es obligatorio.',
+            'last_name.string' => 'El apellido debe ser una cadena de texto.',
+            'last_name.max' => 'El apellido no puede tener más de 255 caracteres.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'result' => false,
+                'msg' => "Error en la validación de datos.",
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $actor = Actor::find($id);
+
+        if (!$actor) {
+            return response()->json([
+                'result' => false,
+                'msg' => "No se encontró el actor especificado.",
+            ], 404);
+        }
+
+        $actor->update($request->only(['first_name', 'last_name']));
+
+        return response()->json([
+            'result' => true,
+            'msg' => "Información de " . $actor->first_name . " actualizada.",
+        ], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina un actor de la base de datos.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        //
+        $actor = Actor::find($id);
+
+        if (!$actor) {
+            return response()->json([
+                'result' => false,
+                'msg' => "No se encontró el actor especificado.",
+            ], 404);
+        }
+
+        $actor->delete();
+
+        return response()->json([
+            'result' => true,
+            'msg' => "Actor eliminado exitosamente."
+        ], 204);
     }
 }
