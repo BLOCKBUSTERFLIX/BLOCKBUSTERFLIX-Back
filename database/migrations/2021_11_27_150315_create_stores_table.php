@@ -16,15 +16,11 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('address_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            /*
-                        `manager_staff_id` TINYINT(3) UNSIGNED NOT NULL,
-                        `address_id` SMALLINT(5) UNSIGNED NOT NULL,
-                        UNIQUE INDEX `idx_unique_manager` (`manager_staff_id`) USING BTREE,
-                        INDEX `idx_fk_address_id` (`address_id`) USING BTREE,
-                        CONSTRAINT `fk_store_address` FOREIGN KEY (`address_id`) REFERENCES `sakila`.`address` (`address_id`) ON UPDATE CASCADE ON DELETE RESTRICT,
-                        CONSTRAINT `fk_store_staff` FOREIGN KEY (`manager_staff_id`) REFERENCES `sakila`.`staff` (`staff_id`) ON UPDATE CASCADE ON DELETE RESTRICT
-            */
+            $table->foreignId('manager_staff_id')->constrained('staff')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('address_id')->constrained('address')->cascadeOnUpdate()->restrictOnDelete();
+            
+            $table->unique('manager_staff_id', 'idx_unique_manager');
+            $table->index('address_id', 'idx_fk_address_id');
 
             $table->timestamps();
         });
