@@ -58,7 +58,7 @@ class LanguageController extends Controller
             ], 401);
         }
 
-        $language = Language::create($request->only(['name']));
+            $language = Language::create($request->only(['name']));
         return response()->json([
             'result' => true,
             'msg' => "Lenguaje registrado con éxito.",
@@ -82,26 +82,60 @@ class LanguageController extends Controller
         ], 200);
 
     }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),
+        [
+            'name' => "required|string|max:20"
+        ], [
+            'name.required' => 'El nombre del lenguaje es obligatorio.',
+            'name.string' => 'El nombre del lenguaje debe ser una cadena de texto.',
+            'name.max' => 'El nombre del lenguaje no puede tener más de 20 caracteres.',
+        ]
+        );
+        if($validator->fails()){
+            return response()->json([
+                'result' => false,
+                'msg' => "Los datos no cumplen.",
+                'errors' => $validator->errors()
+            ], 401);
+        }
+
+        $language = Language::find($id);
+
+        if (!$language) {
+            return response()->json([
+                'result' => false,
+                'msg' => "No se encontró el lenguaje especificado.",
+            ], 404);
+        }
+
+        $language->update($request->only(['name']));
+
+        return response()->json([
+            'result' => true,
+            'msg' => "Lenguaje actualizado con éxito.",
+            'data' => $language
+        ], 201);
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        //
+        $language = Language::find($id);
+
+        if (!$language) {
+            return response()->json([
+                'result' => false,
+                'msg' => "No se encontró el lenguaje especificado.",
+            ], 404);
+        }
+
+        $language->delete();
+
+        return response()->json([
+            'result' => true,
+            'msg' => "Se elimino el lenguaje " . $language->name . ".",
+        ], 201);
     }
 }
