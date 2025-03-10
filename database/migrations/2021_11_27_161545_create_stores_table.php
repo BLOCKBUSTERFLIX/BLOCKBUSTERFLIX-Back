@@ -16,11 +16,8 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('manager_staff_id')->constrained('staff')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('address_id')->constrained('address')->cascadeOnUpdate()->restrictOnDelete();
-            
-            $table->unique('manager_staff_id', 'idx_unique_manager');
-            $table->index('address_id', 'idx_fk_address_id');
+            $table->foreignId('manager_staff_id')->constrained('staff')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('address_id')->constrained('addresses')->constrained()->cascadeOnUpdate()->restrictOnDelete();
 
             $table->timestamps();
         });
