@@ -15,6 +15,7 @@ use App\Http\Controllers\api\StaffController;
 use App\Http\Controllers\api\StoreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,84 +31,89 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v3')->group(function () {
 
     //Rutas resource
-    /* 
-        api/v3
-        POST: /name/new
-        PUT: name/update/:id
-        GET: name/:id
-        GET: name/
-        DELETE: name/:id
-
+    /*
+        URL: http://127.0.0.1:8000/api/v3
+        POST: /{name}/new
+        PUT: {name}/update/:id
+        GET: {name}/:id
+        GET: {name}/
+        DELETE: {name}/:id
     */
-    Route::resource('actor',  ActorController::class);
-    Route::resource('country',  CountryController::class);
+    Route::resource('actors',  ActorController::class);
+    Route::resource('countries',  CountryController::class);
     Route::resource('languages',  LanguageController::class);
     Route::resource('films',  FilmController::class);
-    Route::resource('city',  CityController::class);
-    Route::resource('address', AddressController::class);
-    Route::resource('store',  StoreController::class);
-    Route::resource('staff',  StaffController::class);
+    Route::resource('cities',  CityController::class);
+    Route::resource('addresses', AddressController::class);
+    Route::resource('stores',  StoreController::class);
+    Route::resource('staffs',  StaffController::class);
 
-    // Category CRUD
-    Route::prefix('category')->controller(CategoryController::class)->group(function () {
+    // Categories CRUD
+    Route::prefix('categories')->controller(CategoryController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
     });
 
-    // Customer CRUD
-    Route::prefix('customer')->controller(CustomerController::class)->group(function () {
+    // Customers CRUD
+    Route::prefix('customers')->controller(CustomerController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
     });
 
-    // Inventory CRUD
-    Route::prefix('inventory')->controller(InventoryController::class)->group(function () {
+    // Inventories CRUD
+    Route::prefix('inventories')->controller(InventoryController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
     });
 
-    // Payment CRUD
-    Route::prefix('payment')->controller(PaymentController::class)->group(function () {
+    // Payments CRUD
+    Route::prefix('payments')->controller(PaymentController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
     });
 
-    // Rental CRUD
-    Route::prefix('rental')->controller(RentalController::class)->group(function () {
+    // Rentals CRUD
+    Route::prefix('rentals')->controller(RentalController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
     });
 
-    // Staff CRUD
-    Route::prefix('staff')->controller(StaffController::class)->group(function () {
+    // Staffs CRUD
+    Route::prefix('staffs')->controller(StaffController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
     });
 
-    // Store CRUD
-    Route::prefix('store')->controller(StoreController::class)->group(function () {
+    // Stores CRUD
+    Route::prefix('stores')->controller(StoreController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/new', 'store');
-        Route::put('/update/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/delete/{id}', 'destroy')->where('id', '[0-9]+');
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
+    });
+
+    Route::get('table/{name}', function ($name) {
+        return array_filter(Schema::getColumnListing($name), function ($column) {
+            return !in_array($column, ['created_at', 'updated_at']);
+        });
     });
 });

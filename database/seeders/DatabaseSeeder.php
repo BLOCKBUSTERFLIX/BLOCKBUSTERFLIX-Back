@@ -25,11 +25,11 @@ class DatabaseSeeder extends Seeder
                 StaffSeeder::class,
                 CategorySeeder::class,
                 CategoryFilmSeeder::class,
-                ActorFilmSeeder::class,
+                //ActorFilmSeeder::class,
                 CustomerSeeder::class,
-                InventorySeeder::class,
-                RentalSeeder::class,
-                PaymentSeeder::class,
+                //InventorySeeder::class,
+                //RentalSeeder::class,
+                //PaymentSeeder::class,
             ]
         );
     }
