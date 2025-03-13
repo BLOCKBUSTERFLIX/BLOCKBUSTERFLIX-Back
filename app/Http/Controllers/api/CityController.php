@@ -11,8 +11,8 @@ class CityController extends Controller
 {
     public function index()
     {
-        $city = City::all();
-        if(count($city) <= 0){
+        $cities = City::all();
+        if(count($cities) <= 0){
             return response()->json([
                 'result' => false,
                 'msg' => "No existen ciudades registradas"
@@ -20,7 +20,8 @@ class CityController extends Controller
         }
         return response()->json([
             'result' => true,
-            'msg' => "Ciudades disponibles."
+            'msg' => "Ciudades disponibles.",
+            'data' => $cities
         ], 200);
     }
     public function store(Request $request)
