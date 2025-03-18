@@ -49,7 +49,7 @@ class CategoryController extends Controller
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
         ]);
 
-        if($request->fails()){
+        if($validator->fails()){
             return response()->json([
                 'result' => false,
                 'msg' => "Error en la validación de datos.",
@@ -107,7 +107,7 @@ class CategoryController extends Controller
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
         ]);
 
-        if($request->fails()){
+        if($validator->fails()){
             return response()->json([
                 'result' => false,
                 'msg' => "Error en la validación de datos.",
