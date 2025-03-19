@@ -33,6 +33,10 @@ class Film extends Model
     {
         return $this->belongsTo(Language::class);
     }
+    public function originalLanguage(): BelongsTo
+{
+    return $this->belongsTo(Language::class, 'original_language_id');
+}
 
     /**
      * Get the categories associated with the Film.

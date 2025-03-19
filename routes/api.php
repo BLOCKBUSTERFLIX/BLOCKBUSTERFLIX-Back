@@ -46,7 +46,7 @@ Route::prefix('v3')->group(function () {
     Route::resource('cities',  CityController::class);
     Route::resource('addresses', AddressController::class);
     Route::resource('stores',  StoreController::class);
-    Route::resource('staffs',  StaffController::class);
+    Route::resource('staff',  StaffController::class);
 
     // Categories CRUD
     Route::prefix('categories')->controller(CategoryController::class)->group(function () {
@@ -94,7 +94,7 @@ Route::prefix('v3')->group(function () {
     });
 
     // Staffs CRUD
-    Route::prefix('staffs')->controller(StaffController::class)->group(function () {
+    Route::prefix('staff')->controller(StaffController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show')->where('id', '[0-9]+');
         Route::post('/', 'store');

@@ -10,27 +10,38 @@ use Illuminate\Support\Facades\Validator;
 class StoreController extends Controller
 {
     public function index()
-    {
-        $stores = Store::all();
-        
-        if(count($stores) <= 0){
-            return response()->json([
-                'result' => false,
-                'msg' => "No hay tiendas registradas."
-            ], 404);
-    
-        }
+{
+    // Cargar las relaciones 'staff' (gerente) y 'address' (dirección)
+    $stores = Store::with(['staff', 'address'])->get();
+
+    if ($stores->isEmpty()) {
         return response()->json([
-            'result' => true,
-            'msg' => "Tiendas disponibles.",
-            'data' => $stores
-        ]);
+            'result' => false,
+            'msg' => "No hay tiendas registradas."
+        ], 404);
     }
+
+    // Transformar los datos para incluir el nombre del gerente y la dirección
+    $storesData = $stores->map(function ($store) {
+        return [
+            'id' => $store->id,
+            'manager_staff_id' => $store->staff ? $store->staff->first_name : null, // Nombre del gerente
+            'address_id' => $store->address ? $store->address->address : null, // Dirección
+            // Otros campos de la tienda si es necesario
+        ];
+    });
+
+    return response()->json([
+        'result' => true,
+        'msg' => "Tiendas disponibles.",
+        'data' => $storesData
+    ]);
+}
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'manager_staff_id' => 'required|exists:staff,id',
-            'address_id' => 'required|exists:address,id'
+            'address_id' => 'required|exists:addresses,id'
         ], [
             'manager_staff_id.required' => 'El ID del gerente es obligatorio.',
             'manager_staff_id.exists' => 'El gerente debe existir en la tabla de staff.',

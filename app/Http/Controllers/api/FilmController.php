@@ -10,20 +10,41 @@ use Illuminate\Support\Facades\Validator;
 class FilmController extends Controller
 {
     public function index()
-    {
-        $films = Film::all();
-        if(count($films) <= 0){
-            return response()->json([
-                'result' => false,
-                'msg' => "Por el momento no hay peliculas disponibles."
-            ]);
-        }
+{
+    // Cargar las relaciones 'language' (idioma) y 'originalLanguage' (idioma original)
+    $films = Film::with(['language', 'originalLanguage'])->get();
+
+    if ($films->isEmpty()) {
         return response()->json([
-            'result' => true,
-            'msg' => "Peliculas del momento",
-            'data' => $films
+            'result' => false,
+            'msg' => "Por el momento no hay películas disponibles."
         ]);
     }
+
+    // Transformar los datos para incluir los nombres de los idiomas
+    $filmsData = $films->map(function ($film) {
+        return [
+            'id' => $film->id,
+            'title' => $film->title, // Suponiendo que 'title' es el nombre de la película
+            'description' => $film->description,
+            'release_year' => $film->release_year,// Suponiendo que 'title' es el nombre de la película
+            'language_id' => $film->language ? $film->language->name : null, // Nombre del idioma
+            'original_language_id' => $film->originalLanguage ? $film->originalLanguage->name : null, // Nombre del idioma original
+            'rental_duration' => $film->rental_duration,
+            'rental_rate' => $film->rental_rate,
+            'length' => $film->length,
+            'replacement_cost' => $film->replacement_cost,
+            'rating' => $film->rating,
+            'special_features' => $film->special_features,
+        ];
+    });
+
+    return response()->json([
+        'result' => true,
+        'msg' => "Películas del momento.",
+        'data' => $filmsData
+    ]);
+}
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

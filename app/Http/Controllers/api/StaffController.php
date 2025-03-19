@@ -35,7 +35,7 @@ class StaffController extends Controller
             'email' => 'nullable|email|max:50',
             'store_id' => 'required|exists:stores,id',
             'active' => 'nullable|boolean',
-            'username' => 'required|string|max:16|unique:users,username',
+            'username' => 'required|string|max:16|unique:staff,username',
             'password' => 'nullable|string|min:6|max:40',
         ], [
             'first_name.required' => 'El nombre es obligatorio.',
@@ -101,7 +101,7 @@ class StaffController extends Controller
             'data' => $staff
         ]);
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:45',
@@ -111,7 +111,7 @@ class StaffController extends Controller
             'email' => 'nullable|email|max:50',
             'store_id' => 'required|exists:stores,id',
             'active' => 'nullable|boolean',
-            'username' => 'required|string|max:16|unique:users,username',
+            'username' => 'required|string|max:16|unique:staff,username' . $id,
             'password' => 'nullable|string|min:6|max:40',
         ], [
             'first_name.required' => 'El nombre es obligatorio.',
@@ -149,6 +149,7 @@ class StaffController extends Controller
 
         if($validator->fails()){
             return response()->json([
+                'data_received' => $request->all(),
                 'result' => false,
                 'msg' => "Los datos no cumplen.",
                 'errors' => $validator->errors()
@@ -163,7 +164,7 @@ class StaffController extends Controller
             ], 404);
         }
 
-        $staff = Staff::update($request->only('first_name', 'last_name', 'address_id', 'picture', 'email', 'store_id', 'active', 'username', 'password'));
+        $staff->update($request->only('first_name', 'last_name', 'address_id', 'picture', 'email', 'store_id', 'active', 'username', 'password'));
         return response()->json([
             'result' => true,
             'msg' => "Se actualizaron los datos de manera exitosa.",
