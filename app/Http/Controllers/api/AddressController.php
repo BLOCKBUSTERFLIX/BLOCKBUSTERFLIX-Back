@@ -16,7 +16,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        $addresses = Address::all();
+        $addresses = Address::take(100)->get();
 
         if ($addresses->isEmpty()) {
             return response()->json([

@@ -18,7 +18,7 @@ class InventoryController extends Controller
     {
         $inventories = Inventory::with('film', 'store')->get();
 
-        if(!$inventories->isEmpty()){
+        if($inventories->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay inventario registrado."
