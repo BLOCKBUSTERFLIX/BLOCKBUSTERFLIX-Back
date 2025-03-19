@@ -40,6 +40,7 @@ Route::prefix('v3')->group(function () {
         DELETE: {name}/:id
     */
     Route::resource('actors',  ActorController::class);
+    Route::resource('payments',  PaymentController::class);
     Route::resource('countries',  CountryController::class);
     Route::resource('languages',  LanguageController::class);
     Route::resource('films',  FilmController::class);
