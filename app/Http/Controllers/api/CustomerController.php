@@ -18,7 +18,7 @@ class CustomerController extends Controller
     {
         $customers = Customer::with('store', 'address')->get();
 
-        if(!$customers->isEmpty()){
+        if($customers->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay clientes registrados.",

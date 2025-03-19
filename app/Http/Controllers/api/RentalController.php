@@ -18,7 +18,7 @@ class RentalController extends Controller
     {
         $rentals = Rental::with('inventory', 'customer', 'staff')->get();
 
-        if(!$rentals->isEmpty()){
+        if($rentals->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay rentas registradas."

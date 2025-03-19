@@ -53,12 +53,13 @@ class FilmController extends Controller
             'release_year' => 'nullable|digits:4|integer|between:1900,' . date('Y'),
             'language_id' => 'required|exists:languages,id',
             'original_language_id' => 'nullable|exists:languages,id',
-            'rental_duration' => 'nullable|integer|min:0',
+            'rental_duration' => 'nullable|integer|min:1',
             'rental_rate' => 'nullable|numeric|min:0',
             'length' => 'nullable|integer|min:1',
             'replacement_cost' => 'nullable|numeric|min:0',
             'rating' => 'nullable|in:G,PG,PG-13,R,NC-17',
-            'special_features' => 'nullable',
+            'special_features' => 'nullable|string',
+            'special_features.*' => 'in:Trailers,Commentaries,Deleted Scenes,Behind the Scenes',
         ], [
             'title.required' => 'El título es obligatorio.',
             'title.string' => 'El título debe ser una cadena de texto.',
@@ -89,7 +90,6 @@ class FilmController extends Controller
 
             'rating.in' => 'El valor del campo calificación debe ser uno de los siguientes: G, PG, PG-13, R, NC-17.',
 
-            'special_features.array' => 'Las características especiales deben ser un arreglo.',
             'special_features.*.in' => 'Cada característica especial debe ser uno de los siguientes: Trailers, Commentaries, Deleted Scenes, Behind the Scenes.',
         ]);
         if($validator->fails()){
@@ -134,7 +134,7 @@ class FilmController extends Controller
             'length' => 'nullable|integer|min:1',
             'replacement_cost' => 'nullable|numeric|min:0',
             'rating' => 'nullable|in:G,PG,PG-13,R,NC-17',
-            'special_features' => 'nullable',
+            'special_features' => 'nullable|array',
             'special_features.*' => 'in:Trailers,Commentaries,Deleted Scenes,Behind the Scenes',
         ], [
             'title.required' => 'El título es obligatorio.',
