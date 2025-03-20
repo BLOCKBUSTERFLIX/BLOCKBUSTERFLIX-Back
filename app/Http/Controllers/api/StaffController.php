@@ -111,7 +111,7 @@ class StaffController extends Controller
             'email' => 'nullable|email|max:50',
             'store_id' => 'required|exists:stores,id',
             'active' => 'nullable|boolean',
-            'username' => 'required|string|max:16|unique:staff,username' . $id,
+            'username' => 'required|string|max:16,username',
             'password' => 'nullable|string|min:6|max:40',
         ], [
             'first_name.required' => 'El nombre es obligatorio.',

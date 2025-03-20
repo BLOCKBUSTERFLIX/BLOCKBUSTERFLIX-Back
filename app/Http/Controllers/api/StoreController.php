@@ -87,7 +87,7 @@ class StoreController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'manager_staff_id' => 'required|exists:staff,id',
-            'address_id' => 'required|exists:address,id'
+            'address_id' => 'required|exists:addresses,id'
         ], [
             'manager_staff_id.required' => 'El ID del gerente es obligatorio.',
             'manager_staff_id.exists' => 'El gerente debe existir en la tabla de staff.',
