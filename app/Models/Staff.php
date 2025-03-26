@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Staff extends Model
+
+class Staff extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
@@ -60,5 +63,21 @@ class Staff extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Obtener el identificador del JWT.
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Obtener los claims personalizados del JWT.
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

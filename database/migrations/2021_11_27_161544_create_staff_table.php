@@ -23,7 +23,7 @@ class CreateStaffTable extends Migration
             $table->string('email', 50)->nullable();
             $table->boolean('active')->default('1');
             $table->string('username', 16);
-            $table->string('password', 40)->nullable();
+            $table->string('password')->nullable();
 
             /*
                 `first_name` VARCHAR(45) NOT NULL COLLATE 'utf8mb4_general_ci',

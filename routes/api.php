@@ -13,7 +13,7 @@ use App\Http\Controllers\api\PaymentController;
 use App\Http\Controllers\api\RentalController;
 use App\Http\Controllers\api\StaffController;
 use App\Http\Controllers\api\StoreController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\api\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -116,5 +116,14 @@ Route::prefix('v3')->group(function () {
         return array_filter(Schema::getColumnListing($name), function ($column) {
             return !in_array($column, ['created_at', 'updated_at']);
         });
+    });
+
+    Route::prefix('auth')->controller(AuthController::class)->group(function () {
+        Route::middleware('auth:api')->group(function () {
+            Route::post('logout', 'logout');
+            Route::post('refresh', 'refresh');
+            Route::get('info', 'me');
+        });
+        Route::post('login', 'login');
     });
 });

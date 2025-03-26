@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class StaffController extends Controller
@@ -12,7 +13,7 @@ class StaffController extends Controller
     public function index()
     {
         $staff = Staff::all();
-        if(count($staff) <= 0){
+        if (count($staff) <= 0) {
             return response()->json([
                 'result' => false,
                 'message' => 'No hay staff registrados.'
@@ -41,37 +42,37 @@ class StaffController extends Controller
             'first_name.required' => 'El nombre es obligatorio.',
             'first_name.string' => 'El nombre debe ser un texto.',
             'first_name.max' => 'El nombre no puede exceder los 45 caracteres.',
-            
+
             'last_name.required' => 'El apellido es obligatorio.',
             'last_name.string' => 'El apellido debe ser un texto.',
             'last_name.max' => 'El apellido no puede exceder los 45 caracteres.',
-            
+
             'address_id.required' => 'Se requiere una dirección.',
             'address_id.exists' => 'La dirección seleccionada no es válida.',
-            
+
             'picture.image' => 'La imagen debe ser un archivo de imagen.',
             'picture.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg, gif o svg.',
             'picture.max' => 'La imagen no puede superar los 2MB.',
-            
+
             'email.email' => 'El correo electrónico debe ser válido.',
             'email.max' => 'El correo electrónico no puede exceder los 50 caracteres.',
-            
+
             'store_id.required' => 'Se requiere una tienda.',
             'store_id.exists' => 'La tienda seleccionada no es válida.',
-            
+
             'active.boolean' => 'El estado de activo debe ser verdadero o falso.',
-            
+
             'username.required' => 'El nombre de usuario es obligatorio.',
             'username.string' => 'El nombre de usuario debe ser un texto.',
             'username.max' => 'El nombre de usuario no puede exceder los 16 caracteres.',
             'username.unique' => 'El nombre de usuario ya está en uso.',
-            
+
             'password.string' => 'La contraseña debe ser un texto.',
             'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
             'password.max' => 'La contraseña no puede exceder los 40 caracteres.',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'result' => false,
                 'msg' => "Los datos no cumplen.",
@@ -79,7 +80,18 @@ class StaffController extends Controller
             ], 421);
         }
 
-        $staff = Staff::create($request->only('first_name', 'last_name', 'address_id', 'picture', 'email', 'store_id', 'active', 'username', 'password'));
+        $staff = Staff::create([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'address_id' => $request->input('address_id'),
+            'picture' => $request->input('picture'),
+            'email' => $request->input('email'),
+            'store_id' => $request->input('store_id'),
+            'active' => $request->input('active'),
+            'username' => $request->input('username'),
+            'password' => Hash::make($request->input('password'))
+        ]);
+
         return response()->json([
             'result' => true,
             'msg' => "Staff registrado de manera exitosa."
@@ -89,7 +101,7 @@ class StaffController extends Controller
     public function show($id)
     {
         $staff = Staff::find($id);
-        if(!$staff){
+        if (!$staff) {
             return response()->json([
                 'result' => false,
                 'message' => 'No se encontró el staff.'
@@ -117,37 +129,37 @@ class StaffController extends Controller
             'first_name.required' => 'El nombre es obligatorio.',
             'first_name.string' => 'El nombre debe ser un texto.',
             'first_name.max' => 'El nombre no puede exceder los 45 caracteres.',
-            
+
             'last_name.required' => 'El apellido es obligatorio.',
             'last_name.string' => 'El apellido debe ser un texto.',
             'last_name.max' => 'El apellido no puede exceder los 45 caracteres.',
-            
+
             'address_id.required' => 'Se requiere una dirección.',
             'address_id.exists' => 'La dirección seleccionada no es válida.',
-            
+
             'picture.image' => 'La imagen debe ser un archivo de imagen.',
             'picture.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg, gif o svg.',
             'picture.max' => 'La imagen no puede superar los 2MB.',
-            
+
             'email.email' => 'El correo electrónico debe ser válido.',
             'email.max' => 'El correo electrónico no puede exceder los 50 caracteres.',
-            
+
             'store_id.required' => 'Se requiere una tienda.',
             'store_id.exists' => 'La tienda seleccionada no es válida.',
-            
+
             'active.boolean' => 'El estado de activo debe ser verdadero o falso.',
-            
+
             'username.required' => 'El nombre de usuario es obligatorio.',
             'username.string' => 'El nombre de usuario debe ser un texto.',
             'username.max' => 'El nombre de usuario no puede exceder los 16 caracteres.',
             'username.unique' => 'El nombre de usuario ya está en uso.',
-            
+
             'password.string' => 'La contraseña debe ser un texto.',
             'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
             'password.max' => 'La contraseña no puede exceder los 40 caracteres.',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'data_received' => $request->all(),
                 'result' => false,
@@ -157,7 +169,7 @@ class StaffController extends Controller
         }
 
         $staff = Staff::find($id);
-        if(!$staff){
+        if (!$staff) {
             return response()->json([
                 'result' => false,
                 'message' => 'No se encontró el staff.'
@@ -175,7 +187,7 @@ class StaffController extends Controller
     public function destroy($id)
     {
         $staff = Staff::find($id);
-        if(!$staff){
+        if (!$staff) {
             return response()->json([
                 'result' => false,
                 'message' => 'No se encontró el staff.'

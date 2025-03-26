@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class StaffSeeder extends Seeder
 {
@@ -24,20 +25,20 @@ class StaffSeeder extends Seeder
                 'email'      => 'Mike.Hillyer@sakilastaff.com',
                 'active'     => 1,
                 'username'   => 'Mike',
-                'password'   => '8cb2237d0679ca88db6464eac60da96345513964',
+                'password'   => Hash::make('contrasena'),
                 'created_at' => '2006-02-15 03:57:16',
                 'updated_at' => '2006-02-15 03:57:16',
             ],
             [
                 'id'         => 2,
-                'first_name' => 'Jon',
-                'last_name'  => 'Stephens',
+                'first_name' => 'Fernando',
+                'last_name'  => 'Zapata',
                 'address_id' => 4,
                 'picture'    => null,
-                'email'      => 'Jon.Stephens@sakilastaff.com',
+                'email'      => 'jafetavalos49@gmail.com',
                 'active'     => 1,
                 'username'   => 'Jon',
-                'password'   => null,
+                'password'   => Hash::make('jafetavalos49@gmail.com'),
                 'created_at' => '2006-02-15 03:57:16',
                 'updated_at' => '2006-02-15 03:57:16',
             ],
