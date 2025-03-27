@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
                 CitySeeder::class,
                 AddressSeeder::class,
                 StoreSeeder::class,
+                RoleSeed::class,
                 StaffSeeder::class,
                 CategorySeeder::class,
                 CategoryFilmSeeder::class,
