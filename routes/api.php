@@ -14,6 +14,7 @@ use App\Http\Controllers\api\RentalController;
 use App\Http\Controllers\api\StaffController;
 use App\Http\Controllers\api\StoreController;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\EmailController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -238,13 +239,24 @@ Route::prefix('v3')->group(function () {
             Route::post('refresh', 'refresh');
             Route::get('info', 'me');
         });
-        Route::post('send-code-verification', 'sendCodeVerification');
-        Route::post('check-code-verification', 'sendCodeVerification');
-
+        Route::post('login', 'login');
+        
+        Route::resource('staff',  StaffController::class);
 
         Route::post('recovery-account', 'recoveryAccount');
         Route::post('recovery-account-verification', 'recoveryAccountVerification');
 
+    });
+
+    Route::prefix('auth')->controller(EmailController::class)->group(function () {
+        Route::middleware('auth:api')->group(function () {
+            Route::post('logout', 'logout');
+            Route::post('refresh', 'refresh');
+            Route::get('info', 'me');
+        });
+        Route::get('check-code-verification', 'activate')->name('activate.acount');
 
     });
+
+
 });

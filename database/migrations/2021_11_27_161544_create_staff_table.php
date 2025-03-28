@@ -21,11 +21,9 @@ class CreateStaffTable extends Migration
             $table->foreignId('address_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->string('picture')->nullable();
             $table->string('email', 50)->nullable();
-            $table->boolean('active')->default('1');
             $table->string('username', 16);
             $table->string('password');
-            $table->foreignId('role_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->timestamp('email_at')->nullable();
+            $table->foreignId('role_id')->default(3)->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->string('code_verification')->nullable();
             $table->string('code_recuperation')->nullable();
 

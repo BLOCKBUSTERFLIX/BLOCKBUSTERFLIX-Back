@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Activation;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class StaffController extends Controller
@@ -28,14 +32,14 @@ class StaffController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:45',
             'last_name' => 'required|string|max:45',
             'address_id' => 'required|exists:addresses,id',
             'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'email' => 'nullable|email|max:50',
+            'email' => 'required|unique:staff,email|email|max:50',
             'store_id' => 'required|exists:stores,id',
-            'active' => 'nullable|boolean',
             'username' => 'required|string|max:16|unique:staff,username',
             'password' => 'nullable|string|min:6|max:40',
         ], [
@@ -87,11 +91,18 @@ class StaffController extends Controller
             'picture' => $request->input('picture'),
             'email' => $request->input('email'),
             'store_id' => $request->input('store_id'),
-            'active' => $request->input('active'),
             'username' => $request->input('username'),
             'password' => Hash::make($request->input('password'))
         ]);
 
+/*         $signedUrl = URL::temporarySignedRoute(
+            'activate.acount',
+            now()->addHours(1),
+            ['email' => $staff->email]
+        );
+
+        Mail::to($staff->email)->send(new Activation($signedUrl, $staff->first_name));
+ */
         return response()->json([
             'result' => true,
             'msg' => "Staff registrado de manera exitosa."
