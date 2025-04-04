@@ -18,7 +18,7 @@ class StoreController extends Controller
         return response()->json([
             'result' => false,
             'msg' => "No hay tiendas registradas."
-        ], 404);
+        ], 204);
     }
 
     // Transformar los datos para incluir el nombre del gerente y la dirección
@@ -35,7 +35,7 @@ class StoreController extends Controller
         'result' => true,
         'msg' => "Tiendas disponibles.",
         'data' => $storesData
-    ]);
+    ], 200);
 }
     public function store(Request $request)
     {
@@ -63,7 +63,7 @@ class StoreController extends Controller
             'result' => true,
             'msg' => "Tienda creada con éxito.",
             'data' => $store
-        ], 201);
+        ], 200);
 
     }
 
@@ -75,13 +75,13 @@ class StoreController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la tienda especificada.",
-            ], 404);
+            ], 204);
         }
         return response()->json([
             'result' => true,
             'msg' => "Tienda encontrada.",
             'data' => $store
-        ]);
+        ], 200);
     }
     public function update(Request $request, $id)
     {
@@ -109,7 +109,7 @@ class StoreController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la tienda especificada.",
-            ], 404);
+            ], 204);
         }
         
         $store->update($request->only(['manager_staff_id', 'address_id']));
@@ -130,7 +130,7 @@ class StoreController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la tienda especificada.",
-            ], 404);
+            ], 204);
         }
         
         $store->delete();

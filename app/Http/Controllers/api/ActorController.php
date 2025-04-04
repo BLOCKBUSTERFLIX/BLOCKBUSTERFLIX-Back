@@ -22,7 +22,7 @@ class ActorController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No hay actores registrados."
-            ], 404);
+            ], 204);
         }
 
         return response()->json([
@@ -83,7 +83,7 @@ class ActorController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el actor especificado.",
-            ], 404);
+            ], 204);
         }
 
         return response()->json([
@@ -129,7 +129,7 @@ class ActorController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el actor especificado.",
-            ], 404);
+            ], 204);
         }
 
         $actor->update($request->only(['first_name', 'last_name']));
@@ -162,6 +162,6 @@ class ActorController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Actor eliminado exitosamente."
-        ], 204);
+        ], 200);
     }
 }

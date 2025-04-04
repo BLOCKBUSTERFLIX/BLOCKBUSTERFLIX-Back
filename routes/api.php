@@ -30,203 +30,86 @@ use Illuminate\Support\Facades\Schema;
 */
 
 Route::prefix('v3')->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
+        Route::get('actors', [ActorController::class, 'index'])->middleware(['role:1,2,3']);
+        Route::get('actors/{id}', [ActorController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
+        Route::post('actors', [ActorController::class, 'store'])->middleware(['role:1,2']);
+        Route::put('actors/{id}', [ActorController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::delete('actors/{id}', [ActorController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        
+        Route::get('films', [FilmController::class, 'index'])->middleware(['role:1,2,3']);
+        Route::get('films/{id}', [FilmController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
+        Route::post('films', [FilmController::class, 'store'])->middleware(['role:1,2']);
+        Route::put('films/{id}', [FilmController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::delete('films/{id}', [FilmController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        
+        Route::get('payments', [PaymentController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('payments/{id}', [PaymentController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('payments', [PaymentController::class, 'store'])->middleware(['role:1']);
+        Route::put('payments/{id}', [PaymentController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('payments/{id}', [PaymentController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('countries', [CountryController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('countries/{id}', [CountryController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('countries', [CountryController::class, 'store'])->middleware(['role:1']);
+        Route::put('countries/{id}', [CountryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('countries/{id}', [CountryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('languages', [LanguageController::class, 'index'])->middleware(['role:1']);
+        Route::get('languages/{id}', [LanguageController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::post('languages', [LanguageController::class, 'store'])->middleware(['role:1']);
+        Route::put('languages/{id}', [LanguageController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('languages/{id}', [LanguageController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('cities', [CityController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('cities/{id}', [CityController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('cities', [CityController::class, 'store'])->middleware(['role:1']);
+        Route::put('cities/{id}', [CityController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('cities/{id}', [CityController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('addresses', [AddressController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('addresses/{id}', [AddressController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('addresses', [AddressController::class, 'store'])->middleware(['role:1']);
+        Route::put('addresses/{id}', [AddressController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('addresses/{id}', [AddressController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('stores', [StoreController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('stores/{id}', [StoreController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('stores', [StoreController::class, 'store'])->middleware(['role:1']);
+        Route::put('stores/{id}', [StoreController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('stores/{id}', [StoreController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('staff', [StaffController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('staff/{id}', [StaffController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('staff', [StaffController::class, 'store'])->middleware(['role:1']);
+        Route::put('staff/{id}', [StaffController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('staff/{id}', [StaffController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        
+        Route::get('categories', [CategoryController::class, 'index'])->middleware(['role:1,2,3']);
+        Route::get('categories/{id}', [CategoryController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
+        Route::post('categories', [CategoryController::class, 'store'])->middleware(['role:1,2']);
+        Route::put('categories/{id}', [CategoryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
 
-    //Rutas resource
-    /*
-        URL: http://127.0.0.1:8000/api/v3
-        POST: /{name}/new
-        PUT: {name}/update/:id
-        GET: {name}/:id
-        GET: {name}/
-        DELETE: {name}/:id
-    */
+        Route::get('inventories', [InventoryController::class, 'index'])->middleware(['role:1,2,3']);
+        Route::get('inventories/{id}', [InventoryController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
+        Route::post('inventories', [InventoryController::class, 'store'])->middleware(['role:1,2']);
+        Route::put('inventories/{id}', [InventoryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::delete('inventories/{id}', [InventoryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
 
-    Route::middleware(['role:1', 'auth:api'])->group(function() {
-        Route::resource('actors',  ActorController::class);
-        Route::resource('payments',  PaymentController::class);
-        Route::resource('countries',  CountryController::class);
-        Route::resource('languages',  LanguageController::class);
-        Route::resource('films',  FilmController::class);
-        Route::resource('cities',  CityController::class);
-        Route::resource('addresses', AddressController::class);
-        Route::resource('stores',  StoreController::class);
-        Route::resource('staff',  StaffController::class);
-        // Categories CRUD
-        Route::prefix('categories')->controller(CategoryController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
+        Route::get('rentals', [RentalController::class, 'index'])->middleware(['role:1,2,3']);
+        Route::get('rentals/{id}', [RentalController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
+        Route::post('rentals', [RentalController::class, 'store'])->middleware(['role:1,2']);
+        Route::put('rentals/{id}', [RentalController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::delete('rentals/{id}', [RentalController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
 
-        // Customers CRUD
-        Route::prefix('customers')->controller(CustomerController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-
-        // Inventories CRUD
-        Route::prefix('inventories')->controller(InventoryController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-
-        // Payments CRUD
-        Route::prefix('payments')->controller(PaymentController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-
-        // Rentals CRUD
-        Route::prefix('rentals')->controller(RentalController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-
-        // Staffs CRUD
-        Route::prefix('staff')->controller(StaffController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-
-        // Stores CRUD
-        Route::prefix('stores')->controller(StoreController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update')->where('id', '[0-9]+');
-            Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
+        Route::get('customers', [CustomerController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('customers/{id}', [CustomerController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('customers', [CustomerController::class, 'store'])->middleware(['role:1']);
+        Route::put('customers/{id}', [CustomerController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
     });
-    Route::middleware(['role:2', 'auth:api'])->group(function() {
-        Route::resource('actors',  ActorController::class);
-        Route::resource('films',  FilmController::class);
-        // Categories CRUD
-        Route::prefix('categories')->controller(CategoryController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-        // Inventories CRUD
-        Route::prefix('inventories')->controller(InventoryController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update')->where('id', '[0-9]+');
-        Route::delete('/{id}', 'destroy')->where('id', '[0-9]+');
-        });
-
-    });
-    Route::middleware(['role:3', 'auth:api'])->group(function(){
-        //Actors
-        Route::prefix('actors')->controller(ActorController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Payments
-        Route::prefix('payments')->controller(PaymentController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Languages
-        Route::prefix('countries')->controller(CountryController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Films
-        Route::prefix('films')->controller(FilmController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Cities
-        Route::prefix('cities')->controller(CityController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Addresses
-        Route::prefix('addresses')->controller(AddressController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Stores
-        Route::prefix('stores')->controller(StoreController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        //Addresses
-        Route::prefix('staff')->controller(StaffController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Categories Read
-        Route::prefix('categories')->controller(CategoryController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Customers Read
-        Route::prefix('customers')->controller(CustomerController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Inventories Read
-        Route::prefix('inventories')->controller(InventoryController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Payments Read
-        Route::prefix('payments')->controller(PaymentController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Rentals Read
-        Route::prefix('rentals')->controller(RentalController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Staffs Read
-        Route::prefix('staff')->controller(StaffController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-
-        // Stores Read
-        Route::prefix('stores')->controller(StoreController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show')->where('id', '[0-9]+');
-        });
-    });
-
+ 
     Route::get('table/{name}', function ($name) {
         return array_filter(Schema::getColumnListing($name), function ($column) {
             return !in_array($column, ['created_at', 'updated_at']);
@@ -239,24 +122,14 @@ Route::prefix('v3')->group(function () {
             Route::post('refresh', 'refresh');
             Route::get('info', 'me');
         });
-        Route::post('login', 'login');
+        Route::post('login', 'login')->name('auth.login');
+        Route::post('verify-2fa', [AuthController::class, 'verifyTwoFactor']);
         
         Route::resource('staff',  StaffController::class);
 
-        Route::post('recovery-account', 'recoveryAccount');
-        Route::post('recovery-account-verification', 'recoveryAccountVerification');
+        Route::post('recovery-account-code', 'sendResetCode');
+        Route::post('recovery-account-verification', 'verifyResetCode');
+        Route::post('recovery-account', 'resetPassword');
 
     });
-
-    Route::prefix('auth')->controller(EmailController::class)->group(function () {
-        Route::middleware('auth:api')->group(function () {
-            Route::post('logout', 'logout');
-            Route::post('refresh', 'refresh');
-            Route::get('info', 'me');
-        });
-        Route::get('check-code-verification', 'activate')->name('activate.acount');
-
-    });
-
-
 });

@@ -22,7 +22,7 @@ class RoleSeed extends Seeder
             ],
             [
                 'id'         => 2,
-                'role'         => "Usuario",
+                'role'         => "Cliente",
             ],
             [
                 'id'         => 3,

@@ -23,7 +23,7 @@ class LanguageController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No hay lenguajes registrados."
-            ], 404);
+            ], 204);
         }
         return response()->json([
             'result' => true,
@@ -73,7 +73,7 @@ class LanguageController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontro el lenguaje."
-            ], 404);
+            ], 204);
         }
         return response()->json([
             'result' => true,
@@ -107,7 +107,7 @@ class LanguageController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el lenguaje especificado.",
-            ], 404);
+            ], 204);
         }
 
         $language->update($request->only(['name']));
@@ -128,7 +128,7 @@ class LanguageController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el lenguaje especificado.",
-            ], 404);
+            ], 204);
         }
 
         $language->delete();

@@ -16,18 +16,37 @@ class StaffController extends Controller
 {
     public function index()
     {
-        $staff = Staff::all();
-        if (count($staff) <= 0) {
+        $staffs = Staff::with('address', 'role')->get();
+        if (count($staffs) <= 0) {
             return response()->json([
                 'result' => false,
                 'message' => 'No hay staff registrados.'
-            ], 404);
+            ], 204);
         }
+
+        $staffData = $staffs->map(function ($staff){
+            return [
+                'id' => $staff->id,
+                'first_name' => $staff->first_name,
+                'last_name' => $staff->last_name,
+                'address_id' => $staff->address_id ? $staff->address->address : null,
+                'picture' => $staff->picture,
+                'email' => $staff->email,
+                'username' => $staff->username,
+                'role_id' => $staff->role_id ? $staff->role->role : null,
+                'role' => $staff->role,
+                'code_verification' => $staff->code_verification,
+                'code_recuperation' => $staff->code_recuperation,
+                'created_at' => $staff->created_at,
+                'updated_at' => $staff->updated_at,
+            ];
+        });
+
         return response()->json([
             'result' => true,
             'message' => 'Staff encontrados.',
-            'data' => $staff
-        ]);
+            'data' => $staffData
+        ], 200);
     }
 
     public function store(Request $request)
@@ -106,23 +125,23 @@ class StaffController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Staff registrado de manera exitosa."
-        ]);
+        ], 200);
     }
 
     public function show($id)
     {
-        $staff = Staff::find($id);
+        $staff = Staff::with('address', 'role')->find($id);
         if (!$staff) {
             return response()->json([
                 'result' => false,
                 'message' => 'No se encontró el staff.'
-            ], 404);
+            ], 204);
         }
         return response()->json([
             'result' => true,
             'message' => 'Staff encontrado.',
             'data' => $staff
-        ]);
+        ], 200);
     }
     public function update(Request $request, int $id)
     {
@@ -184,7 +203,7 @@ class StaffController extends Controller
             return response()->json([
                 'result' => false,
                 'message' => 'No se encontró el staff.'
-            ], 404);
+            ], 204);
         }
 
         $staff->update($request->only('first_name', 'last_name', 'address_id', 'picture', 'email', 'store_id', 'active', 'username', 'password'));
@@ -192,7 +211,7 @@ class StaffController extends Controller
             'result' => true,
             'msg' => "Se actualizaron los datos de manera exitosa.",
             'data' => $staff
-        ]);
+        ], 200);
     }
 
     public function destroy($id)
@@ -202,12 +221,12 @@ class StaffController extends Controller
             return response()->json([
                 'result' => false,
                 'message' => 'No se encontró el staff.'
-            ], 404);
+            ], 204);
         }
         $staff->delete();
         return response()->json([
             'result' => true,
             'message' => 'Staff eliminado.'
-        ]);
+        ], 200);
     }
 }

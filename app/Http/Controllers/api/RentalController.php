@@ -16,19 +16,30 @@ class RentalController extends Controller
      */
     public function index()
     {
-        $rentals = Rental::with('inventory', 'customer', 'staff')->get();
+        $rentals = Rental::with('inventory.film', 'customer', 'staff')->get();
 
         if($rentals->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay rentas registradas."
-            ], 404);
+            ], 204);
         }
+
+        $rentalData = $rentals->map(function ($rental){
+            return [
+                'id' => $rental->id,
+                'rental_date' => $rental->rental_date,
+                'inventory_id' => $rental->inventory_id,
+                'customer_id' => $rental->customer_id ? $rental->customer->first_name : null,
+                'return_date' => $rental->return_date,
+                'staff_id' => $rental->staff_id ? $rental->staff->first_name : null,
+            ];
+        });
 
         return response()->json([
             'result' => true,
             'msg' => "Lista de rentas obtenida exitosamente.",
-            'data' => $rentals
+            'data' => $rentalData
         ], 200);
     }
 
@@ -92,14 +103,14 @@ class RentalController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Renta no encontrado."
-            ]);
+            ], 204);
         }
 
         return response()->json([
             'result' => true,
             'msg' => "Información encontrada.",
             'data' => $rental
-        ]);
+        ], 200);
     }
 
     /**
@@ -147,7 +158,7 @@ class RentalController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Renta no encontrado."
-            ]);
+            ], 204);
         }
 
         $rental->update($request->only('rental_date', 'inventory_id', 'customer_id','return_date', 'staff_id'));
@@ -155,7 +166,7 @@ class RentalController extends Controller
             'result' => true,
             'msg' => "Se actualizaron los datos de manera exitosa.",
             'data' => $rental
-        ]);
+        ], 200);
     }
 
     /**
@@ -171,7 +182,7 @@ class RentalController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Registro no encontrado."
-            ]);
+            ], 204);
         }
 
         $rental->delete();
@@ -179,6 +190,6 @@ class RentalController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Se elimino el registro especificado.",
-        ]);
+        ], 200);
     }
 }

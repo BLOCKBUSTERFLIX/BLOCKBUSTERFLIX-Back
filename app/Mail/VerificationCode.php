@@ -9,28 +9,28 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Recovery extends Mailable
+class VerificationCode extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $resetCode;
+    public $twoFactorCode;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($resetCode)
+    public function __construct($twoFactorCode)
     {
-        $this->resetCode = $resetCode;
+        $this->twoFactorCode = $twoFactorCode;
     }
 
     public function build()
     {
-        return $this->subject('Código de recuperación')
-        ->view('emails.recovery')
+        return $this->subject('Código de Verificación')
+        ->view('emails.code')
         ->with([
-            'code' => $this->resetCode,
+            'twoFactorCode' => $this->twoFactorCode,
         ]);
     }
 }

@@ -16,20 +16,32 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::with('store', 'address')->get();
+        $customers = Customer::with('store.address', 'address')->get();
 
         if($customers->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay clientes registrados.",
                 'data' => "holas"
-            ], 404);
+            ], 204);
         }
+
+        $customerData = $customers->map(function ($customer){
+            return [
+                'id' => $customer->id,
+                'store_id' => $customer->store_id ? $customer->store->address->address : null,
+                'first_name' => $customer->first_name,
+                'last_name' => $customer->last_name,
+                'email' => $customer->email,
+                'address_id' => $customer->address_id ? $customer->address->address : null,
+                'active' => $customer->active
+            ];
+        });
         
         return response()->json([
             'result' => true,
             'msg' => "Lista de clientes obtenida exitosamente.",
-            'data' => $customers
+            'data' => $customerData
         ], 200);
     }
 
@@ -177,7 +189,7 @@ class CustomerController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Cliente no encontrado."
-            ]);
+            ], 204);
         }
 
         $customer->delete();
@@ -185,6 +197,6 @@ class CustomerController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Se elimino el cliente " . $customer->first_name . ".",
-        ]);
+        ], 200);
     }
 }

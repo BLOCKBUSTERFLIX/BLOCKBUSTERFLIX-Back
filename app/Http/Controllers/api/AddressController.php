@@ -16,19 +16,32 @@ class AddressController extends Controller
      */
     public function index()
     {
-        $addresses = Address::take(100)->get();
+        $addresses = Address::with('city')->take(100)->get();
 
         if ($addresses->isEmpty()) {
             return response()->json([
                 'result' => false,
                 'msg' => "No hay direcciones registradas."
-            ], 404);
+            ], 204);
         }
+
+        $addressData = $addresses->map(function ($address){
+            return [
+                'id' => $address->id,
+                'address' => $address->address,
+                'address2' => $address->address2,
+                'district' => $address->district,
+                'city_id' => $address->city_id ? $address->city->city : null,
+                'postal_code' => $address->postal_code,
+                'phone' => $address->phone,
+                'location' => $address->location
+            ];
+        });
 
         return response()->json([
             'result' => true,
             'msg' => "Lista de direcciones obtenida exitosamente.",
-            'data' => $addresses
+            'data' => $addressData
         ], 200);
     }
 
@@ -81,7 +94,7 @@ class AddressController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la dirección especificada.",
-            ], 404);
+            ], 204);
         }
 
         return response()->json([
@@ -124,7 +137,7 @@ class AddressController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la dirección especificada.",
-            ], 404);
+            ], 204);
         }
 
         $address->update($request->only(['address', 'address2', 'district', 'city_id', 'postal_code', 'phone', 'location']));

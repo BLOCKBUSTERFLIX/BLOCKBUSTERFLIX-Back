@@ -13,6 +13,7 @@ class Payment extends Model
 {
     use HasFactory;
 
+    protected $table = 'payments';
     /**
      * Protected fields when mass assigning
      * @var string[]

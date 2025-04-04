@@ -16,19 +16,31 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with('customer', 'staff', 'rental')->get();
+        $payments = Payment::with('customer', 'staff', 'rental.film')->get();
 
-        if(!$payments->isEmpty()){
+        if($payments->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay pagos registrados."
-            ], 404);
+            ], 204);
         }
-        
+
+        $paymentData = $payments->map(function ($payment){
+            return [
+                'id' => $payment->id,
+                'customer_id' => $payment->customer_id ? $payment->customer->first_name : null,
+                'staff_id' => $payment->staff_id ? $payment->staff->first_name : null,
+                'rental_id' => $payment->rental_id,
+                //'rental_id' => $payment->rental_id ? $payment->rental->film->title : null,
+                'amount' => $payment->amount,
+                'payment_date' => $payment->payment_date
+            ];
+        });
+
         return response()->json([
             'result' => true,
             'msg' => "Lista de pagos obtenida exitosamente.",
-            'data' => $payments
+            'data' => $paymentData
         ], 200);
     }
 
@@ -88,14 +100,14 @@ class PaymentController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Pago no encontrado."
-            ]);
+            ], 204);
         }
 
         return response()->json([
             'result' => true,
             'msg' => "Se encontro la  información del pago.",
             'data' => $payment
-        ]);
+        ], 200);
     }
 
     /**
@@ -143,7 +155,7 @@ class PaymentController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Pago no encontrado."
-            ]);
+            ], 204);
         }
 
         $payment->update($request->only('customer_id', 'staff_id', 'rental_id','amount', 'payment_date'));
@@ -151,7 +163,7 @@ class PaymentController extends Controller
             'result' => true,
             'msg' => "Se actualizo el pago de manera exitosa.",
             'data' => $payment
-        ]);
+        ], 200);
     }
 
     /**
@@ -167,7 +179,7 @@ class PaymentController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Pago no encontrado."
-            ]);
+            ], 204);
         }
 
         $payment->delete();
@@ -175,6 +187,6 @@ class PaymentController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Se elimino el pago.",
-        ]);
+        ], 200);
     }
 }

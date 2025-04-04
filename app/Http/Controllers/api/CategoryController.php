@@ -23,7 +23,7 @@ class CategoryController extends Controller
                 'result' => false,
                 'msg' => "No hay categorías."
 
-            ], 404);
+            ], 204);
         }
 
         return response()->json([
@@ -79,7 +79,7 @@ class CategoryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la categoría especificada.",
-            ], 404); 
+            ], 204); 
         }
 
         return response()->json([
@@ -121,7 +121,7 @@ class CategoryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró la categoría especificada.",
-            ], 404); 
+            ], 204); 
         }
 
         $category->update($request->only(['name']));
@@ -154,6 +154,6 @@ class CategoryController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Categoría eliminada exitosamente."
-        ], 204);
+        ], 200);
     }
 }

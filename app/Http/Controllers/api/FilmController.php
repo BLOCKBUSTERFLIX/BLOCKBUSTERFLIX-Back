@@ -18,7 +18,7 @@ class FilmController extends Controller
         return response()->json([
             'result' => false,
             'msg' => "Por el momento no hay películas disponibles."
-        ]);
+        ], 204);
     }
 
     // Transformar los datos para incluir los nombres de los idiomas
@@ -103,7 +103,7 @@ class FilmController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Se creo la pelicula de " . $film->title . " de manera exitosa."
-        ]);
+        ], 200);
     }
 
     public function show(int $id)
@@ -119,7 +119,7 @@ class FilmController extends Controller
             'result' => true,
             'msg' => "Se encontro la pelicula de " . $film->title . ".",
             'data' => $film
-        ]);
+        ], 200);
     }
     public function update(Request $request, int $id)
     {
@@ -180,13 +180,13 @@ class FilmController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "La pelicula ingresada no existe."
-            ]);
+            ], 204);
         }
         $film->update($request->only(['title','description','release_year','language_id','original_language_id','rental_duration','rental_rate','length','replacement_cost','rating','special_features']));
         return response()->json([
             'result' => true,
             'msg' => "Se actualizaron los datos de " . $film->title . " de manera exitosa."
-        ]);
+        ], 200);
 
 
     }
@@ -197,12 +197,12 @@ class FilmController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontro la pelicula buscada."
-            ]);
+            ], 204);
         }
         $film->delete();
         return response()->json([
             'result' => true,
             'msg' => "Se elimino la pelicula de " . $film->title . ".",
-        ]);
+        ], 200);
     }
 }

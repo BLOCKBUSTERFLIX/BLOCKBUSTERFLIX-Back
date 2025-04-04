@@ -16,20 +16,27 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        $inventories = Inventory::with('film', 'store')->get();
+        $inventories = Inventory::with('film', 'store.address')->get();
 
         if($inventories->isEmpty()){
             return response()->json([
                 'result' => false,
                 'msg' => "No hay inventario registrado."
-            ], 404);
+            ], 204);
         }
 
+        $inventoryData = $inventories->map(function ($inventory){
+            return [
+                'id' => $inventory->id,
+                'film_id' => $inventory->film_id ? $inventory->film->title : null,
+                'store_id' => $inventory->store_id ? $inventory->store->address->address : null,
+            ];
+        });
         
         return response()->json([
             'result' => true,
             'msg' => "Lista de inventario obtenida exitosamente.",
-            'data' => $inventories
+            'data' => $inventoryData
         ], 200);
     }
 
@@ -80,7 +87,7 @@ class InventoryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Inventario no encontrado."
-            ]);
+            ], 204);
         }
 
         return response()->json([
@@ -123,7 +130,7 @@ class InventoryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Inventario no encontrado."
-            ]);
+            ], 204);
         }
 
         $invetory->update($request->only('film_id', 'store_id'));
@@ -131,7 +138,7 @@ class InventoryController extends Controller
             'result' => true,
             'msg' => "Se actualizaron los datos de manera exitosa.",
             'data' => $invetory
-        ]);
+        ], 200);
     }
 
     /**
@@ -148,7 +155,7 @@ class InventoryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "Inventario no encontrado."
-            ]);
+            ], 204);
         }
 
         $invetory->delete();
@@ -157,6 +164,6 @@ class InventoryController extends Controller
         return response()->json([
             'result' => true,
             'msg' => "Se elimino el inventario.",
-        ]);
+        ], 200);
     }
 }

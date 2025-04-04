@@ -81,6 +81,8 @@ class Staff extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'role_id' => $this->role_id,
+        ];
     }
 }

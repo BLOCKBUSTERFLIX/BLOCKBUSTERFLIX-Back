@@ -23,7 +23,7 @@ class CountryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No hay países registrados."
-            ], 404);
+            ], 204);
         }
 
         return response()->json([
@@ -80,7 +80,7 @@ class CountryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el país especificado.",
-            ], 404);
+            ], 204);
         }
 
         return response()->json([
@@ -121,7 +121,7 @@ class CountryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el país especificado.",
-            ], 404);
+            ], 204);
         }
 
         $country->update($request->only(['country']));
@@ -147,7 +147,7 @@ class CountryController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontró el país especificado.",
-            ], 404);
+            ], 204);
         }
 
         $country->delete();

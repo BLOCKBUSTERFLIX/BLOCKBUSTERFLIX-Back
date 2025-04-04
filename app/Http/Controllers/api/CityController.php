@@ -11,17 +11,26 @@ class CityController extends Controller
 {
     public function index()
     {
-        $cities = City::all();
+        $cities = City::with('country')->get();
         if(count($cities) <= 0){
             return response()->json([
                 'result' => false,
                 'msg' => "No existen ciudades registradas"
-            ], 404);
+            ], 204);
         }
+
+        $cityData = $cities->map(function ($city){
+            return [
+                'id' => $city->id,
+                'city' => $city->city,
+                'country_id' => $city->country_id ? $city->country->country : null
+            ];
+        });
+
         return response()->json([
             'result' => true,
             'msg' => "Ciudades disponibles.",
-            'data' => $cities
+            'data' => $cityData
         ], 200);
     }
     public function store(Request $request)
@@ -60,7 +69,7 @@ class CityController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontro la ciudad."
-            ], 404);
+            ], 204);
         }
         return response()->json([
             'result' => true,
@@ -98,7 +107,7 @@ class CityController extends Controller
             return response()->json([
                 'result' => false,
                 'msg' => "No se encontro la ciudad."
-            ], 404);
+            ], 204);
         }
         $city->update($request->only(['city', 'country_id']));
         return response()->json([
