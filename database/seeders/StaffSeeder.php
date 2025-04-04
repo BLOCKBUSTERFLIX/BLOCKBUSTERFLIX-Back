@@ -40,7 +40,7 @@ class StaffSeeder extends Seeder
                 
                 'username'   => 'Jon',
                 'password'   => Hash::make('jafetavalos49@gmail.com'),
-                'role_id'   => 2,
+                'role_id'   => 1,
                 'created_at' => '2006-02-15 03:57:16',
                 'updated_at' => '2006-02-15 03:57:16',
             ],

@@ -15,6 +15,7 @@ use App\Http\Controllers\api\StaffController;
 use App\Http\Controllers\api\StoreController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\EmailController;
+use App\Http\Controllers\api\RoleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -108,7 +109,11 @@ Route::prefix('v3')->group(function () {
         Route::post('customers', [CustomerController::class, 'store'])->middleware(['role:1']);
         Route::put('customers/{id}', [CustomerController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
         Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+    
+        Route::get('roles', [RoleController::class, 'index'])->middleware(['role:1']);
+
     });
+    
  
     Route::get('table/{name}', function ($name) {
         return array_filter(Schema::getColumnListing($name), function ($column) {

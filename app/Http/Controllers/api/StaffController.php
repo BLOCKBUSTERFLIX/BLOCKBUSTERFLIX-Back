@@ -61,6 +61,7 @@ class StaffController extends Controller
             'store_id' => 'required|exists:stores,id',
             'username' => 'required|string|max:16|unique:staff,username',
             'password' => 'nullable|string|min:6|max:40',
+            'role_id' => 'sometimes|exists:roles,id',
         ], [
             'first_name.required' => 'El nombre es obligatorio.',
             'first_name.string' => 'El nombre debe ser un texto.',
@@ -93,6 +94,9 @@ class StaffController extends Controller
             'password.string' => 'La contraseña debe ser un texto.',
             'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
             'password.max' => 'La contraseña no puede exceder los 40 caracteres.',
+
+            'role_id.required' => 'Se requiere un rol.',
+            'role_id.exists' => 'El rol seleccionada no es válido.',
         ]);
 
         if ($validator->fails()) {
@@ -102,7 +106,7 @@ class StaffController extends Controller
                 'errors' => $validator->errors()
             ], 421);
         }
-
+        Log::info($request);
         $staff = Staff::create([
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
@@ -111,7 +115,8 @@ class StaffController extends Controller
             'email' => $request->input('email'),
             'store_id' => $request->input('store_id'),
             'username' => $request->input('username'),
-            'password' => Hash::make($request->input('password'))
+            'password' => Hash::make($request->input('password')),
+            'role_id' => $request->input('role_id'),
         ]);
 
 /*         $signedUrl = URL::temporarySignedRoute(
@@ -155,6 +160,7 @@ class StaffController extends Controller
             'active' => 'nullable|boolean',
             'username' => 'required|string|max:16,username',
             'password' => 'nullable|string|min:6|max:40',
+            'role_id' => 'required|exists:roles,id',
         ], [
             'first_name.required' => 'El nombre es obligatorio.',
             'first_name.string' => 'El nombre debe ser un texto.',
@@ -187,6 +193,9 @@ class StaffController extends Controller
             'password.string' => 'La contraseña debe ser un texto.',
             'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
             'password.max' => 'La contraseña no puede exceder los 40 caracteres.',
+
+            'role_id.required' => 'Se requiere un rol.',
+            'role_id.exists' => 'El rol seleccionada no es válido.',
         ]);
 
         if ($validator->fails()) {
@@ -206,7 +215,7 @@ class StaffController extends Controller
             ], 204);
         }
 
-        $staff->update($request->only('first_name', 'last_name', 'address_id', 'picture', 'email', 'store_id', 'active', 'username', 'password'));
+        $staff->update($request->only('first_name', 'last_name', 'address_id', 'picture', 'email', 'store_id', 'active', 'username', 'password', 'role_id'));
         return response()->json([
             'result' => true,
             'msg' => "Se actualizaron los datos de manera exitosa.",

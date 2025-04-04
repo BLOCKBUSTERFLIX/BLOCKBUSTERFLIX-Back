@@ -20,9 +20,6 @@ class Role
     {
         //$role = [1, 2, 3];
         $user = Auth::guard('api')->user();
-        Log::debug("User role_id: {$user->role_id}");
-        Log::debug("Expected role: ", (array)$role); 
-        
         if ($user && in_array($user->role_id, $role)) {
             return $next($request);
         }
