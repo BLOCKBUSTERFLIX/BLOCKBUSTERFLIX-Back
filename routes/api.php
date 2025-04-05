@@ -56,11 +56,11 @@ Route::prefix('v3')->group(function () {
         Route::put('countries/{id}', [CountryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
         Route::delete('countries/{id}', [CountryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
         
-        Route::get('languages', [LanguageController::class, 'index'])->middleware(['role:1']);
-        Route::get('languages/{id}', [LanguageController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1']);
-        Route::post('languages', [LanguageController::class, 'store'])->middleware(['role:1']);
-        Route::put('languages/{id}', [LanguageController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
-        Route::delete('languages/{id}', [LanguageController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::get('languages', [LanguageController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('languages/{id}', [LanguageController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('languages', [LanguageController::class, 'store'])->middleware(['role:1,2']);
+        Route::put('languages/{id}', [LanguageController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::delete('languages/{id}', [LanguageController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
         
         Route::get('cities', [CityController::class, 'index'])->middleware(['role:1,3']);
         Route::get('cities/{id}', [CityController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
@@ -92,11 +92,11 @@ Route::prefix('v3')->group(function () {
         Route::put('categories/{id}', [CategoryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
         Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
 
-        Route::get('inventories', [InventoryController::class, 'index'])->middleware(['role:1,2,3']);
-        Route::get('inventories/{id}', [InventoryController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
-        Route::post('inventories', [InventoryController::class, 'store'])->middleware(['role:1,2']);
-        Route::put('inventories/{id}', [InventoryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1,2']);
-        Route::delete('inventories/{id}', [InventoryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1,2']);
+        Route::get('inventories', [InventoryController::class, 'index'])->middleware(['role:1,3']);
+        Route::get('inventories/{id}', [InventoryController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,3']);
+        Route::post('inventories', [InventoryController::class, 'store'])->middleware(['role:1']);
+        Route::put('inventories/{id}', [InventoryController::class, 'update'])->where('id', '[0-9]+')->middleware(['role:1']);
+        Route::delete('inventories/{id}', [InventoryController::class, 'destroy'])->where('id', '[0-9]+')->middleware(['role:1']);
 
         Route::get('rentals', [RentalController::class, 'index'])->middleware(['role:1,2,3']);
         Route::get('rentals/{id}', [RentalController::class, 'show'])->where('id', '[0-9]+')->middleware(['role:1,2,3']);
